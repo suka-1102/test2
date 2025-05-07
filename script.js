@@ -28,6 +28,7 @@ startButton.addEventListener("click",function() {
   this.classList.add("inActive");
   numbersList.classList.add("isPlaying");
 
+  settings.numberRows = initSettings.numberRows
   settings.correctAnswersNumber = initSettings.correctAnswersNumber
   settings.gamesFinishedNumber = initSettings.gamesFinishedNumber
 
@@ -63,6 +64,12 @@ function setGame() {
 
     li.addEventListener("click", () => {
       settings.gamesFinishedNumber++;
+
+      const currentDifficulty = document.querySelector('form[name="selectDifficultyLevel"]')
+      if (settings.gamesFinishedNumber % settings.difficulty[currentDifficulty.difficultyLevel.value].changeRow === 0) {
+        settings.numberRows++;
+      }
+      
       document.querySelector("#numbers .isMaxNumber").classList.add("isAnswer")
       const iscorrect = randomArray[i] === maxNumber
       if (iscorrect) {
