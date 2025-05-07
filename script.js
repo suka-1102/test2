@@ -1,5 +1,5 @@
 const settings = {
-  timeLimit: 3,
+  timeLimit: 30,
   gridSize: 50,
   correctAnswersNumber: 0,
   gamesFinishedNumber: 0,
@@ -17,14 +17,21 @@ const settings = {
   }
 }
 
+const initSettings = JSON.parse(JSON.stringify(settings))
 const numbersList = document.getElementById("numbers");
 const startButton = document.getElementById("startButton")
+const correctAnswers = document.getElementById("correctAnswers")
 
 document.getElementById("timeLimit").textContent = `${settings.timeLimit}秒`;
 
 startButton.addEventListener("click",function() {
   this.classList.add("inActive");
   numbersList.classList.add("isPlaying");
+
+  settings.correctAnswersNumber = initSettings.correctAnswersNumber
+  settings.gamesFinishedNumber = initSettings.gamesFinishedNumber
+
+  correctAnswers.textContent = ''
   setGame();
   setTimer(settings.timeLimit)
 })
@@ -62,6 +69,9 @@ function setGame() {
         settings.correctAnswersNumber++
       }
       li.setAttribute("class", iscorrect ? 'correct fa-regular fa-circle': 'inCorrect fa-solid fa-xmark')
+      setTimeout(() => {
+        setGame()
+      }, 500)
     })
     numbersList.appendChild(li)
   }
@@ -88,6 +98,7 @@ function setTimer(time) {
     // タイマーが終わった時の処理
     if (remainTime <= 0) {
       cancelAnimationFrame(id)
+      correctAnswers.textContent = `正答数:${settings.correctAnswersNumber} / ${settings.gamesFinishedNumber}回中`
       countdownText.textContent = '残り０秒'
       countdownGaugeInner.style.width = '0'
       startButton.classList.remove("inActive");
