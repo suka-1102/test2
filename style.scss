@@ -36,6 +36,23 @@ main {
       pointer-events: none;
     }
   }
+  .countdown {
+    .countdownText {
+      font-size: 16px;
+      letter-spacing: .1em;
+      text-align: center;
+      margin: 5px;
+    }
+    .countdownGauge {
+      height: 10px;
+      border: 1px solid #333;
+      width: 200px;
+      &Inner {
+        height: 100%;
+        background-color: #666;
+      }
+    }
+  }
   .numbers {
     display: grid;
     place-items:center;

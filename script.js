@@ -1,5 +1,5 @@
 const settings = {
-  timeLimit: 30,
+  timeLimit: 3,
   gridSize: 50,
   correctAnswersNumber: 0,
   gamesFinishedNumber: 0,
@@ -26,6 +26,7 @@ startButton.addEventListener("click",function() {
   this.classList.add("inActive");
   numbersList.classList.add("isPlaying");
   setGame();
+  setTimer(settings.timeLimit)
 })
 
 
@@ -64,5 +65,34 @@ function setGame() {
     })
     numbersList.appendChild(li)
   }
+}
+setGame();
+
+// タイマーの処理
+function setTimer(time) { 
+  const now = new Date()
+  const target = new Date(now.setSeconds(now.getSeconds() + time))
+  const countdownGaugeInner = document.getElementById('countdownGaugeInner')
+  const countdownText = document.getElementById('countdownText');
+
+  (function animation() {
+    const remainTime = target - new Date()
+    let remainSeconds = Math.floor(remainTime / 1000)
+    countdownGaugeInner.style.width = `${(remainTime / 1000 / time) * 100}%`
+    if (remainSeconds < 0) {
+      remainSeconds = 0
+    }
+    countdownText.textContent = `残り時間${remainSeconds + 1}秒`
+    const id = requestAnimationFrame(animation)
+
+    // タイマーが終わった時の処理
+    if (remainTime <= 0) {
+      cancelAnimationFrame(id)
+      countdownText.textContent = '残り０秒'
+      countdownGaugeInner.style.width = '0'
+      startButton.classList.remove("inActive");
+      numbersList.classList.remove("isPlaying");
+    }
+  }())
 }
 
