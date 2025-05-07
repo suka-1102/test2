@@ -5,12 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/destyle.css@1.0.15/destyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 <body>
   <main>
-  
+    <p class="description">
+      一番大きい数字が書いているパネルをクリックしよう！<br>
+      クリアすればするほどレベルが上がっていきます。<br>
+      制限時間は<span id="timeLimit"></span>。いくつクリックできるか
+    </p>
+    <form name="selectDifficultyLevel" >
+      <ul class="difficultyLevel">
+        <li><label><input type="radio" name="difficultyLevel" value="easy" checked>簡単</label></li>
+        <li><label><input type="radio" name="difficultyLevel" value="normal">普通</label></li>
+        <li><label><input type="radio" name="difficultyLevel" value="hard">難しい</label></li>
+      </ul>
+    </form>
+    <button class="startButton" id="startButton">ゲームスタート</button>
+    <ul class="numbers" id="numbers"></ul>
   </main>
 </body>
 </html>
