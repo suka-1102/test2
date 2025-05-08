@@ -1,5 +1,5 @@
 const settings = {
-  timeLimit: 30,
+  timeLimit: 10,
   gridSize: 50,
   correctAnswersNumber: 0,
   gamesFinishedNumber: 0,
@@ -96,8 +96,28 @@ function setTimer(time) {
     const remainTime = target - new Date()
     let remainSeconds = Math.floor(remainTime / 1000)
     countdownGaugeInner.style.width = `${(remainTime / 1000 / time) * 100}%`
+    
+    let remainSecondsNotFloor = remainTime / 1000
+    // ゲージの色の処理
+    if (remainSecondsNotFloor <= (settings.timeLimit / 5)) {
+      countdownText.style.color = "red"
+      countdownGaugeInner.style.backgroundColor = "red";
+      numbersList.style.backgroundColor = "red"
+      numbersList.style.color = "red"
+    }
+    else if (remainSecondsNotFloor <= (settings.timeLimit / 2)) {
+      countdownText.style.color = "orange"
+      countdownGaugeInner.style.backgroundColor = "orange";
+      numbersList.style.backgroundColor = "orange";
+      numbersList.style.color = "orange";
+    }
     if (remainSeconds < 0) {
       remainSeconds = 0
+      countdownText.style.color = "#333"
+      countdownGaugeInner.style.backgroundColor = "#666";
+      numbersList.style.backgroundColor = "#333";
+      numbersList.style.color = "#333";
+
     }
     countdownText.textContent = `残り時間${remainSeconds + 1}秒`
     const id = requestAnimationFrame(animation)
