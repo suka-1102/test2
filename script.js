@@ -1,20 +1,26 @@
 const settings = {
-  timeLimit: 10,
+  timeLimit: 5,
   gridSize: 50,
   correctAnswersNumber: 0,
   gamesFinishedNumber: 0,
   numberRows: 3,
   difficulty: {
     easy: {
-      changeRow: 5
+      changeRow: 5,
+      text: "簡単"
     },
     normal: {
-      changeRow: 3
+      changeRow: 3,
+      text: "普通"
     },
     hard: {
-      changeRow: 1
+      changeRow: 1,
+      text: "難しい"
     },
   }
+}
+if (localStorage.getItem('logCount') === null) {
+  localStorage.setItem('logCount', 0);
 }
 
 const initSettings = JSON.parse(JSON.stringify(settings))
@@ -36,6 +42,41 @@ startButton.addEventListener("click",function() {
   setGame();
   setTimer(settings.timeLimit)
 })
+
+function loadLogsFromStorage() {
+  const logsElement = document.getElementById("logs")
+  const logCountLocal = parseInt(localStorage.getItem('logCount')) || 0;
+
+  for (let i = logCountLocal; i >= 1; i--) {
+    const log = localStorage.getItem(`log${i}`)
+    if (log) {
+      const createLog = document.createElement("li");
+      createLog.innerHTML = log;
+      logsElement.appendChild(createLog);
+    }
+  }
+}
+loadLogsFromStorage();
+// ログを生成する関数
+function insertLog(date, difficulty, score){
+  const logsElement = document.getElementById("logs")
+  const createLog = document.createElement("li");
+  // createLog.innerHTML = `${date}: ${difficulty}: ${score}`;
+ 
+  let logCountLocal = parseInt(localStorage.getItem('logCount'))|| 0;
+  console.log(logCountLocal)
+  logCountLocal += 1;
+  localStorage.setItem('logCount', logCountLocal);
+
+
+
+  localStorage.setItem(`log${logCountLocal}`, `${date}: ${difficulty}: ${score}`)
+  const log = localStorage.getItem(`log${logCountLocal}`);
+
+  createLog.innerHTML = log;
+  logsElement.insertBefore(createLog, logsElement.firstChild)
+};
+
 
 
 function setGame() {
@@ -91,7 +132,17 @@ function setTimer(time) {
   const target = new Date(now.setSeconds(now.getSeconds() + time))
   const countdownGaugeInner = document.getElementById('countdownGaugeInner')
   const countdownText = document.getElementById('countdownText');
+  const currentDifficulty = document.querySelector('form[name="selectDifficultyLevel"]')
 
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // 月は0始まりなので+1
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  
+  const formatted = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  
   (function animation() {
     const remainTime = target - new Date()
     let remainSeconds = Math.floor(remainTime / 1000)
@@ -117,7 +168,8 @@ function setTimer(time) {
       countdownGaugeInner.style.backgroundColor = "#666";
       numbersList.style.backgroundColor = "#333";
       numbersList.style.color = "#333";
-
+    
+      insertLog(formatted, settings.difficulty[currentDifficulty.difficultyLevel.value].text, `正答数:${settings.correctAnswersNumber} / ${settings.gamesFinishedNumber}回中`);
     }
     countdownText.textContent = `残り時間${remainSeconds + 1}秒`
     const id = requestAnimationFrame(animation)

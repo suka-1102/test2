@@ -96,4 +96,15 @@ main .numbers li::before {
   transform: translate(-50%, -50%);
   font-size: 1.2em;
   opacity: 0.7;
+}
+main .logs {
+  border: 1px solid #777;
+  border-radius: 5px;
+  padding: 10px 15px;
+  line-height: 1.8;
+  height: 250px;
+  overflow: auto;
+  margin-top: 30px;
+  box-shadow: 0 0 3px 0 #777 inset;
+  width: 70%;
 }/*# sourceMappingURL=style.css.map */
