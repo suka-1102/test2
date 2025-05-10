@@ -19,9 +19,9 @@ const settings = {
     },
   }
 }
-if (localStorage.getItem('logCount') === null) {
-  localStorage.setItem('logCount', 0);
-}
+// if (localStorage.getItem('logCount') === null) {
+//   localStorage.setItem('logCount', 0);
+// }
 
 const initSettings = JSON.parse(JSON.stringify(settings))
 const numbersList = document.getElementById("numbers");
@@ -44,17 +44,14 @@ startButton.addEventListener("click",function() {
 })
 
 function loadLogsFromStorage() {
-  const logsElement = document.getElementById("logs")
-  const logCountLocal = parseInt(localStorage.getItem('logCount')) || 0;
+  const logsElement = document.getElementById("logs");
+  const logs = JSON.parse(localStorage.getItem('logs')) || [];
 
-  for (let i = logCountLocal; i >= 1; i--) {
-    const log = localStorage.getItem(`log${i}`)
-    if (log) {
-      const createLog = document.createElement("li");
-      createLog.innerHTML = log;
-      logsElement.appendChild(createLog);
-    }
-  }
+  logs.forEach(log => {
+    const createLog = document.createElement("li");
+    createLog.innerHTML = log;
+    logsElement.appendChild(createLog);
+  });
 }
 loadLogsFromStorage();
 // ログを生成する関数
@@ -63,17 +60,14 @@ function insertLog(date, difficulty, score){
   const createLog = document.createElement("li");
   // createLog.innerHTML = `${date}: ${difficulty}: ${score}`;
  
-  let logCountLocal = parseInt(localStorage.getItem('logCount'))|| 0;
-  console.log(logCountLocal)
-  logCountLocal += 1;
-  localStorage.setItem('logCount', logCountLocal);
+  const logs = JSON.parse(localStorage.getItem('logs')) || [];
 
+  const newLog = `${date}: ${difficulty}: ${score}`;
+  logs.unshift(newLog);
 
+  localStorage.setItem('logs', JSON.stringify(logs))
 
-  localStorage.setItem(`log${logCountLocal}`, `${date}: ${difficulty}: ${score}`)
-  const log = localStorage.getItem(`log${logCountLocal}`);
-
-  createLog.innerHTML = log;
+  createLog.innerHTML = newLog;
   logsElement.insertBefore(createLog, logsElement.firstChild)
 };
 
